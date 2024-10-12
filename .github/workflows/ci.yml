@@ -14,7 +14,6 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      # Start a server to serve the app locally
       web:
         image: node:14
         ports:
@@ -26,9 +25,7 @@ jobs:
           --health-retries=3
         volumes:
           - .:/app
-        working_dir: /app
-        command: npm start
-
+          
     steps:
       - name: Check out code
         uses: actions/checkout@v2
@@ -41,6 +38,9 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Start server
+        run: npm start &
+      
       - name: Wait for the server to start
         run: |
           while ! curl -s http://localhost:3000; do
