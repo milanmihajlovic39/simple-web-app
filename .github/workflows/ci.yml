@@ -48,5 +48,5 @@ jobs:
 
       - name: Run tests against the live site
         env:
-          TEST_URL: https://yourusername.github.io/repository-name/
+          TEST_URL: https://milanmihajlovic39.github.io/simple-web-page/
         run: npm run test
