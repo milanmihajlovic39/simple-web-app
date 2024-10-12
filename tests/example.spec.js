@@ -9,8 +9,11 @@ test('homepage has title and button', async ({ page }) => {
     await expect(button).toBeVisible();
 });
 
-test('button click updates message', async ({ page }) => {
+test('button click fetches and displays message', async ({ page }) => {
     await page.goto(BASE_URL);
     await page.click('button#clickMe');
-    await expect(page.locator('#message')).toHaveText('Button was clicked!');
+    const messageLocator = page.locator('#message');
+    await expect(messageLocator).toBeVisible();
+    const response = await page.locator('#message').innerText();
+    await expect(response).toContain('Hello from the API!');
 });

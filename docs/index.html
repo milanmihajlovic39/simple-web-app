@@ -10,8 +10,10 @@
     <button id="clickMe">Click Me!</button>
     <p id="message"></p>
     <script>
-        document.getElementById('clickMe').onclick = function() {
-            document.getElementById('message').innerText = 'Button was clicked!';
+        document.getElementById('clickMe').onclick = async function() {
+            const response = await fetch('/api/message');
+            const data = await response.json();
+            document.getElementById('message').innerText = data.message;
         };
     </script>
 </body>
