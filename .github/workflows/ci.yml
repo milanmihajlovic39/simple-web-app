@@ -1,0 +1,57 @@
+# .github/workflows/ci.yml
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      # Start a server to serve the app locally
+      web:
+        image: node:14
+        ports:
+          - 3000:3000
+        options: >-
+          --health-cmd="curl -f http://localhost:3000 || exit 1"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+        volumes:
+          - .:/app
+        working_dir: /app
+        command: npm start
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Wait for the server to start
+        run: |
+          while ! curl -s http://localhost:3000; do
+            echo "Waiting for server to start..."
+            sleep 5
+          done
+
+      - name: Run tests against the local server
+        run: npm run test
+
+      - name: Run tests against the live site
+        env:
+          TEST_URL: https://yourusername.github.io/repository-name/
+        run: npm run test
