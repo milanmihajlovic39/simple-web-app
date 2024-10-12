@@ -13,19 +13,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    services:
-      web:
-        image: node:14
-        ports:
-          - 3000:3000
-        options: >-
-          --health-cmd="curl -f http://localhost:3000 || exit 1"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
-        volumes:
-          - .:/app
-          
     steps:
       - name: Check out code
         uses: actions/checkout@v2
@@ -43,8 +30,13 @@ jobs:
       
       - name: Wait for the server to start
         run: |
-          while ! curl -s http://localhost:3000; do
-            echo "Waiting for server to start..."
+          echo "Waiting for the server to be available..."
+          for i in {1..30}; do
+            if curl -s http://localhost:3000; then
+              echo "Server is up!"
+              break
+            fi
+            echo "Waiting..."
             sleep 5
           done
 
