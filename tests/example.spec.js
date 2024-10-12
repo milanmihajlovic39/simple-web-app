@@ -16,4 +16,5 @@ test('button click fetches and displays message', async ({ page }) => {
     await expect(messageLocator).toBeVisible();
     const response = await page.locator('#message').innerText();
     await expect(response).toContain('Hello from the API!');
+    //comment
 });
