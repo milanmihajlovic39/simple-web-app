@@ -14,24 +14,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out code
+      - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
+      - name: Set Up Node.js Environment
         uses: actions/setup-node@v3
         with:
           node-version: '20'
 
-      - name: Install dependencies
+      - name: Install Dependencies
         run: npm install
 
-      - name: Install Playwright browsers
+      - name: Install Playwright Browsers
         run: npx playwright install
 
-      - name: Start server
+      - name: Start Local Development Server
         run: npm start &
 
-      - name: Wait for the server to start
+      - name: Wait for Server to Be Ready
         run: |
           echo "Waiting for the server to be available..."
           for i in {1..30}; do
@@ -43,12 +43,12 @@ jobs:
             sleep 5
           done
 
-      - name: Run tests against the local server
+      - name: Run Tests On CI Environment
         env:
           BASE_URL: http://localhost:3000/
         run: npm run test
 
-      - name: Run tests against the live site
+      - name: Run Tests On Live App
         env:
           BASE_URL: https://milanmihajlovic39.github.io/simple-web-app/
         run: npm run test
