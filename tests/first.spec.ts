@@ -1,14 +1,18 @@
 import { FirstPage } from "./pages/FirstPage";
 import { test, expect } from '@playwright/test';
 
-const BASE_URL = process.env.TEST_URL || 'http://localhost:3000';
+const baseUrl = process.env.BASE_URL;
+
+if (!baseUrl) {
+  throw new Error('BASE_URL environment variable is not defined');
+}
 
 test.describe('Test page functionality', () => {
     let firstPage: FirstPage;
 
     test.beforeEach(async ({ page }) => {
         firstPage = new FirstPage(page);
-        await page.goto(BASE_URL);
+        await page.goto(baseUrl);
     });
 
     test('homepage has correct title', async ({ page }) => {
