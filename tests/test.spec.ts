@@ -1,4 +1,5 @@
-import { TestPage } from "./pages/Testpage";
+import { TestPage } from "./pages/TestingPage";
+
 
 const { test, expect } = require('@playwright/test');
 
