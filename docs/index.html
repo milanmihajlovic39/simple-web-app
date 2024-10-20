@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TypeScript Test Page</title>
@@ -75,13 +75,10 @@
         margin: 5px 0;
       }
     </style>
-  </head>
-  <body>
+</head>
+<body>
     <div class="container">
       <h1>TypeScript Concepts Test Page</h1>
-      <div class="button-section">
-        <button id="applyData">Apply</button>
-      </div>
       <div class="form-section">
         <label for="firstName">First Name:</label>
         <input type="text" id="firstName" />
@@ -89,6 +86,7 @@
         <input type="number" id="age" />
         <label for="isStudent">Student:</label>
         <input type="checkbox" id="isStudent" />
+        <button id="applyData">Apply</button>
       </div>
       <div class="display-section">
         <p id="displayFirstName"></p>
@@ -98,18 +96,37 @@
       </div>
     </div>
     <script>
+      // Function to send data to the endpoint
+      const sendDataToServer = async (data) => {
+        const response = await fetch('BASE_URL/check', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+        return response.json(); // Assuming the server responds with JSON
+      };
+
       // Apply button click event handler
-      document.getElementById('applyData').addEventListener('click', () => {
+      document.getElementById('applyData').addEventListener('click', async () => {
         // Read input values
         const firstName = document.getElementById('firstName').value;
         const age = document.getElementById('age').value;
         const isStudent = document.getElementById('isStudent').checked;
 
-        // Update display elements
-        document.getElementById('displayFirstName').textContent = firstName;
-        document.getElementById('displayAge').textContent = age;
-        document.getElementById('displayIsStudent').textContent = isStudent ? 'Yes' : 'No';
+        // Prepare data to send
+        const data = { firstName, age, isStudent };
+
+        // Send data to server and get mock response
+        const response = await sendDataToServer(data);
+
+        // Update display elements with the response data
+        document.getElementById('displayFirstName').textContent = response.firstName;
+        document.getElementById('displayAge').textContent = response.age;
+        document.getElementById('displayIsStudent').textContent = response.isStudent ? 'Yes' : 'No';
+        document.getElementById('loadedData').textContent = response.message || 'Data processed successfully!';
       });
     </script>
-  </body>
+</body>
 </html>
