@@ -39,7 +39,7 @@ test.describe('Test page functionality', () => {
         await expect(page).toHaveTitle('TypeScript Test Page');
     });
     
-    test.only('should display all entered data with correct information', async ({ page }) => {
+    test('should display all entered data with correct information', async ({ page }) => {
         await firstPage.firstNameField.fill('Milan');
         await firstPage.ageField.fill('29');
         await firstPage.isStudentCheckbox.check();
