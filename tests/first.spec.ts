@@ -1,3 +1,4 @@
+import { setupMocks } from "./mocks/first";
 import { FirstPage } from "./pages/FirstPage";
 import { test, expect } from '@playwright/test';
 
@@ -13,26 +14,7 @@ test.describe('Test page functionality', () => {
     test.beforeEach(async ({ page }) => {
         firstPage = new FirstPage(page);
         await page.goto(baseUrl);
-        
-        // Mock the POST request to BASE_URL/check
-        await page.route('**/check', (route) => {
-            const requestData = route.request().postDataJSON();
-            
-            // Create a mock response based on the input data
-            const mockResponse = {
-                firstName: requestData.firstName,
-                age: requestData.age,
-                isStudent: requestData.isStudent,
-                message: "Data processed successfully!",
-            };
-
-            // Respond with the mock data
-            route.fulfill({
-                status: 200,
-                contentType: 'application/json',
-                body: JSON.stringify(mockResponse),
-            });
-        });
+        setupMocks(page);
     });
 
     test('homepage has correct title', async ({ page }) => {
